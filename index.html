@@ -1,0 +1,52 @@
+<html>
+<head>
+    <!-- Load Leaflet -->
+  <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
+  integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
+  crossorigin=""></script>
+  <script src="https://unpkg.com/esri-leaflet@2.3.2/dist/esri-leaflet.js"
+  integrity="sha512-6LVib9wGnqVKIClCduEwsCub7iauLXpwrd5njR2J507m3A2a4HXJDLMiSZzjcksag3UluIfuW1KzuWVI5n/cuQ=="
+  crossorigin=""></script>
+  <script src="https://unpkg.com/esri-leaflet-geocoder@2.3.2/dist/esri-leaflet-geocoder.js"
+    integrity="sha512-8twnXcrOGP3WfMvjB0jS5pNigFuIWj4ALwWEgxhZ+mxvjF5/FBPVd5uAxqT8dd2kUmTVK9+yQJ4CmTmSg/sXAQ=="
+    crossorigin=""></script>
+    <!--------End-------->
+</head>
+<body>
+<div>  
+    <label>city:</label>
+    <input id="cityName" type="text">
+    <br>
+    <br>
+    <button onclick="getCity()">Get city name</button>
+</div>
+<p> NOTE: You have to enable "Location Access" on your device first.</p>
+<script>
+function getCity()
+{
+  var latitude,longitude;
+  navigator.geolocation.getCurrentPosition(position=>
+        {
+          var geocodeService = L.esri.Geocoding.geocodeService();
+          //Get position coordinates
+          latitude=position.coords.latitude;
+          longitude=position.coords.longitude;
+          //Get Address information using latitude and longitude
+          geocodeService.reverse().latlng([latitude,longitude]).run(function (error, result)
+          {
+            if (error) 
+            {
+              return"error";
+            }
+            else
+            {
+              /*Get city name*/
+              document.getElementById("cityName").value=result.address.Region;
+            }
+          }
+          );
+          });
+}
+</script>
+</body>
+</html>
